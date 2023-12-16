@@ -11,20 +11,20 @@ import java.util.Set;
 
 import static org.reflections.scanners.Scanners.TypesAnnotated;
 
-public class BaseBeanScannerFactory {
+public class DefaultBeanScanner {
 
     private final Reflections reflections;
-    private static final BaseBeanProvider BASE_BEAN_PROVIDER = BaseBeanProvider.getInstance();;
+    private static final DefaultSingletonBeanProvider DEFAULT = DefaultSingletonBeanProvider.getInstance();;
 
-    public BaseBeanScannerFactory(String packageToScan) {
+    public DefaultBeanScanner(String packageToScan) {
         this(packageToScan, "");
     }
 
-    public BaseBeanScannerFactory(String packageToScan, String packageExclude) {
+    public DefaultBeanScanner(String packageToScan, String packageExclude) {
         this(packageToScan, packageExclude, Scanners.values());
     }
 
-    public BaseBeanScannerFactory(String packageToScan, String packageExclude, Scanners[] scanners) {
+    public DefaultBeanScanner(String packageToScan, String packageExclude, Scanners[] scanners) {
         reflections = new Reflections(
                 new ConfigurationBuilder()
                         .forPackage(packageToScan)
@@ -38,6 +38,6 @@ public class BaseBeanScannerFactory {
     private void scanAndRegisterSingleton() {
         Set<Class<?>> singletons = reflections.get(TypesAnnotated.with(Singleton.class).asClass());
         singletons.forEach(aClass ->
-                BASE_BEAN_PROVIDER.register(aClass, ReflectUtils.newInstance(aClass)));
+                DEFAULT.register(aClass, ReflectUtils.newInstance(aClass)));
     }
 }

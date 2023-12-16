@@ -5,7 +5,7 @@ import com.amasoft.ReflectUtils;
 import com.amasoft.annotation.event.CustomEvent;
 import com.amasoft.event.EventDispatcher;
 import com.amasoft.event.ListenerMethod;
-import com.amasoft.provider.BaseBeanProvider;
+import com.amasoft.provider.DefaultSingletonBeanProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,7 +28,7 @@ public abstract class AbstractSubject implements Subject {
     private LinkedHashSet<ListenerMethod> listeners = null;
 
     protected AbstractSubject() {
-        eventDispatcher = (EventDispatcher) BaseBeanProvider
+        eventDispatcher = (EventDispatcher) DefaultSingletonBeanProvider
                 .getInstance()
                 .getInstanceOfType(EventDispatcher.class);
 
