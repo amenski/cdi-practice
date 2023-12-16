@@ -1,4 +1,4 @@
-package com.amasoft;
+package com.amasoft.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;

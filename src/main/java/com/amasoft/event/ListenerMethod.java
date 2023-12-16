@@ -1,5 +1,7 @@
-package com.amasoft;
+package com.amasoft.event;
 
+
+import com.google.common.base.Preconditions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +17,7 @@ public class ListenerMethod {
     private boolean hasParameter = false;
 
     public ListenerMethod(Class<?> eventType, Object listener, Method method) {
-        // TODO validate arguments here
+        Preconditions.checkArgument(eventType != null && listener != null && method != null);
 
         this.eventType = eventType;
         this.target = listener;
@@ -32,7 +34,7 @@ public class ListenerMethod {
 
     public void invokeMethod(final Object event) throws InvocationTargetException, IllegalAccessException {
         // Only send events supported by the method
-        // Preconditions.checkArgument(eventType.isAssignableFrom(event.getClass()));
+         Preconditions.checkArgument(eventType.isAssignableFrom(event.getClass()));
         synchronized (target) {
             method.invoke(target, hasParameter ? new Object[] {event} : new Object[0]);
         }

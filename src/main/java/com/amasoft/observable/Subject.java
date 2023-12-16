@@ -1,6 +1,7 @@
-package com.amasoft;
+package com.amasoft.observable;
 
 import com.amasoft.annotation.event.CustomEvent;
+import com.amasoft.event.ListenerMethod;
 
 import java.lang.reflect.Method;
 import java.util.function.Predicate;

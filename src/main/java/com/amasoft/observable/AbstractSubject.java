@@ -1,7 +1,10 @@
-package com.amasoft;
+package com.amasoft.observable;
 
 
+import com.amasoft.ReflectUtils;
 import com.amasoft.annotation.event.CustomEvent;
+import com.amasoft.event.EventDispatcher;
+import com.amasoft.event.ListenerMethod;
 import com.amasoft.provider.BaseBeanProvider;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,14 +16,14 @@ import java.util.function.Predicate;
  * In observer pattern, the object that watch on the state of another object
  * are called Observer and the object that is being watched is called Subject.
  *
- * Subject contains a list of observers to notify of any change in it’s state,
+ * Subject contains a list of observers to notify of any change in its state,
  * so it should provide methods using which observers can register and unregister themselves.
  */
 public abstract class AbstractSubject implements Subject {
 
     private boolean notifiable = true;
 
-    private EventDispatcher eventDispatcher;
+    private final EventDispatcher eventDispatcher;
 
     private LinkedHashSet<ListenerMethod> listeners = null;
 
