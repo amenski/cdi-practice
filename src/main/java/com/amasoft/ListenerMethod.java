@@ -22,7 +22,7 @@ public class ListenerMethod {
         this.method = method;
 
         final Class<?>[] params = method.getParameterTypes();
-        // check parameter type, TODO fix
+        // check parameter type, TODO multiple param?
         if (params.length > 0) {
             if (params.length == 1 && params[0].isAssignableFrom(eventType)) {
                 hasParameter = true;

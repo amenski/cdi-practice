@@ -1,5 +1,7 @@
 package com.amasoft;
 
+import com.amasoft.annotation.event.CustomEvent;
+
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
@@ -9,7 +11,7 @@ import java.util.function.Predicate;
  *
  *
  */
-public interface Observable {
+public interface Subject {
 
     /**
      * @return whether the subject is notifiable

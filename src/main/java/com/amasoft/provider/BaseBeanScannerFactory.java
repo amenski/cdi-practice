@@ -1,7 +1,7 @@
 package com.amasoft.provider;
 
 import com.amasoft.ReflectUtils;
-import com.amasoft.annotation.Singleton;
+import com.amasoft.annotation.marker.Singleton;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
