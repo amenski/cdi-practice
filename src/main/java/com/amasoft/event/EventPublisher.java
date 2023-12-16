@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 
-public class EventDispatcher {
+public class EventPublisher {
 
     public void fireEvent(Set<ListenerMethod> listeners, Object event) throws InvocationTargetException, IllegalAccessException {
         if (listeners == null) return;

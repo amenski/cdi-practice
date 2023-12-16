@@ -3,7 +3,7 @@ package com.amasoft.observable;
 
 import com.amasoft.ReflectUtils;
 import com.amasoft.annotation.event.CustomEvent;
-import com.amasoft.event.EventDispatcher;
+import com.amasoft.event.EventPublisher;
 import com.amasoft.event.ListenerMethod;
 import com.amasoft.provider.DefaultSingletonBeanProvider;
 
@@ -23,14 +23,14 @@ public abstract class AbstractSubject implements Subject {
 
     private boolean notifiable = true;
 
-    private final EventDispatcher eventDispatcher;
+    private final EventPublisher eventPublisher;
 
     private LinkedHashSet<ListenerMethod> listeners = null;
 
     protected AbstractSubject() {
-        eventDispatcher = (EventDispatcher) DefaultSingletonBeanProvider
+        eventPublisher = (EventPublisher) DefaultSingletonBeanProvider
                 .getInstance()
-                .getInstanceOfType(EventDispatcher.class);
+                .getInstanceOfType(EventPublisher.class);
 
     }
 
@@ -96,9 +96,9 @@ public abstract class AbstractSubject implements Subject {
 
     @Override
     public void fireEvent(CustomEvent event) {
-        if (eventDispatcher != null && isNotifiable()) {
+        if (eventPublisher != null && isNotifiable()) {
             try {
-                eventDispatcher.fireEvent(listeners, event);
+                eventPublisher.fireEvent(listeners, event);
             } catch (InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
