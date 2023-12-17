@@ -1,81 +1,19 @@
 package com.amasoft.observable;
 
-import com.amasoft.annotation.event.CustomEvent;
-import com.amasoft.event.ListenerMethod;
+import com.amasoft.event.*;
 
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
-/**
- * This interface represents an observable object, or "data" in the subject-observer paradigm.
- * It can be implemented to represent an object that the observer wants to have listened.
- *
- *
- */
-public interface Subject {
+public interface Subject<E extends ApplicationEvent> {
 
-    /**
-     * @return whether the subject is notifiable
-     */
-    boolean isNotifiable();
+    void addListener(ApplicationListener<E> listener);
 
-    /**
-     * Set notifiable of subject
-     */
-    void setNotifiable(boolean notifiable);
+    void removeListener(ApplicationListener<E> listener);
 
-    /**
-     * Add listener to observable subject.
-     * @param eventType type of event
-     * @param listener listener object
-     * @param method listener method
-     */
-    void addListener(Class<?> eventType, Object listener, Method method);
-
-    /**
-     * Add listener to observable subject.
-     * @param eventType type of event
-     * @param listener listener object
-     * @param methodName name of listener method
-     */
-    void addListener(Class<?> eventType, Object listener, String methodName);
-
-
-    void removeListener(Predicate<ListenerMethod> predicate);
-
-    /**
-     * Remove listener from observable subject.
-     * @param eventType type of event
-     * @param listener listener object
-     * @param method listener method
-     */
-    void removeListener(Class<?> eventType, Object listener, Method method);
-
-    /**
-     * Remove listener to observable subject.
-     * @param eventType type of event
-     * @param listener listener object
-     * @param methodName name of listener method
-     */
-    void removeListener(Class<?> eventType, Object listener, String methodName);
-
-    /**
-     * Add listener to observable subject.
-     * @param eventType type of event
-     * @param listener listener object
-     */
-    void removeListener(Class<?> eventType, Object listener);
-
-    /**
-     * Remove all listeners
-     */
     void removeAllListeners();
 
-    /**
-     * Fire event to notify all observers
-     * @param event based event
-     */
-    void fireEvent(CustomEvent event);
+    void notifyListeners();
 
     int getListenerSize();
 }

@@ -1,16 +1,10 @@
 package com.amasoft.observable;
 
 
-import com.amasoft.ReflectUtils;
-import com.amasoft.annotation.event.CustomEvent;
-import com.amasoft.event.EventPublisher;
-import com.amasoft.event.ListenerMethod;
-import com.amasoft.provider.DefaultSingletonBeanProvider;
+import com.amasoft.event.ApplicationEvent;
+import com.amasoft.event.ApplicationListener;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
-import java.util.function.Predicate;
 
 /**
  * In observer pattern, the object that watch on the state of another object
@@ -19,89 +13,39 @@ import java.util.function.Predicate;
  * Subject contains a list of observers to notify of any change in its state,
  * so it should provide methods using which observers can register and unregister themselves.
  */
-public abstract class AbstractSubject implements Subject {
+public abstract class AbstractSubject<E extends ApplicationEvent> implements Subject<E> {
 
-    private boolean notifiable = true;
+    private E event;
 
-    private final EventPublisher eventPublisher;
+    private final LinkedHashSet<ApplicationListener<E>> listeners = new LinkedHashSet<>();
 
-    private LinkedHashSet<ListenerMethod> listeners = null;
-
-    protected AbstractSubject() {
-        eventPublisher = (EventPublisher) DefaultSingletonBeanProvider
-                .getInstance()
-                .getInstanceOfType(EventPublisher.class);
-
+    public void updateEvent(E event) {
+        this.event = event;
+        notifyListeners();
     }
 
     @Override
-    public boolean isNotifiable() {
-        return notifiable;
+    public void addListener(ApplicationListener<E> listener) {
+        listeners.add(listener);
     }
 
     @Override
-    public void setNotifiable(boolean notifiable) {
-        this.notifiable = notifiable;
-    }
-
-    @Override
-    public void addListener(Class<?> eventType, Object listener, Method method) {
-        if (listeners == null) {
-            listeners = new LinkedHashSet<>();
-        }
-        listeners.add(new ListenerMethod(eventType, listener, method));
-    }
-
-    @Override
-    public void addListener(Class<?> eventType, Object listener, String methodName) {
-        Method method = ReflectUtils.getFirstMethodOfName(listener.getClass(), methodName);
-        addListener(eventType, listener, method);
-    }
-
-    public void removeListener(Predicate<ListenerMethod> filter) {
-        if (listeners != null) {
-            listeners.removeIf(filter);
-        }
-    }
-
-    @Override
-    public void removeListener(Class<?> eventType, Object listener, Method method) {
-        if (listeners != null) {
-            listeners.removeIf(listenerMethod -> listenerMethod.matches(eventType, listener, method));
-        }
-    }
-
-    @Override
-    public int getListenerSize() {
-        return listeners != null ? listeners.size() : 0;
-    }
-
-    @Override
-    public void removeListener(Class<?> eventType, Object listener, String methodName) {
-        Method method = ReflectUtils.getFirstMethodOfName(listener.getClass(), methodName);
-        removeListener(eventType, listener, method);
-    }
-
-    @Override
-    public void removeListener(Class<?> eventType, Object listener) {
-        if (listeners != null) {
-            listeners.removeIf(listenerMethod -> listenerMethod.matches(eventType, listener));
-        }
+    public void removeListener(ApplicationListener<E> listener) {
+        listeners.remove(listener);
     }
 
     @Override
     public void removeAllListeners() {
-       listeners = null;
+        listeners.clear();
     }
 
     @Override
-    public void fireEvent(CustomEvent event) {
-        if (eventPublisher != null && isNotifiable()) {
-            try {
-                eventPublisher.fireEvent(listeners, event);
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public void notifyListeners() {
+        listeners.forEach(listener -> listener.onApplicationEvent(this.event));
+    }
+
+    @Override
+    public int getListenerSize() {
+        return listeners.size();
     }
 }
